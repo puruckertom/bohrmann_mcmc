@@ -1,0 +1,126 @@
+c1u9
+c1u9
+c1u9
+c1u9
+c1u9
+c1u9
+c1u9
+c1u9
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("Rmpi")
+> execdirs <- scan("execdirs","");
+Read 105 items
+> ndirs = length(execdirs)
+> 
+> DoParallelStuff <- function() {
++    j = 0
++    myid = mpi.comm.rank()
++    npes = mpi.comm.size()
++    steps = seq(myid,ndirs,npes)
++    for(i in steps) {
++       j = j + 1
++       results[j] <- paste("Process file ",i,"on PE",myid,"\n") 
++    }
++    return(results)
++ }
+> 
+> # Load the R MPI package if it is not already loaded.
+> 
+> if (!is.loaded("mpi_initialize")) {
++    library("Rmpi")
++ }
+> 
+> # Spawn as many slaves as possible
+> 
+> mpi.spawn.Rslaves(needlog=FALSE)
+	8 slaves are spawned successfully. 0 failed.
+master (rank 0, comm 1) of size 9 is running on: c1u9 
+slave1 (rank 1, comm 1) of size 9 is running on: c1u9 
+slave2 (rank 2, comm 1) of size 9 is running on: c1u9 
+slave3 (rank 3, comm 1) of size 9 is running on: c1u9 
+... ... ...
+slave7 (rank 7, comm 1) of size 9 is running on: c1u9 
+slave8 (rank 8, comm 1) of size 9 is running on: c1u9 
+> 
+> finalresults <- mpi.remote.exec(DoParallelStuff)
+> 
+> print(finalresults)
+$slave1
+[1] "Error in eval(expr, envir, enclos) : object 'DoParallelStuff' not found\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in eval(expr, envir, enclos): object 'DoParallelStuff' not found>
+
+$slave2
+[1] "Error in eval(expr, envir, enclos) : object 'DoParallelStuff' not found\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in eval(expr, envir, enclos): object 'DoParallelStuff' not found>
+
+$slave3
+[1] "Error in eval(expr, envir, enclos) : object 'DoParallelStuff' not found\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in eval(expr, envir, enclos): object 'DoParallelStuff' not found>
+
+$slave4
+[1] "Error in eval(expr, envir, enclos) : object 'DoParallelStuff' not found\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in eval(expr, envir, enclos): object 'DoParallelStuff' not found>
+
+$slave5
+[1] "Error in eval(expr, envir, enclos) : object 'DoParallelStuff' not found\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in eval(expr, envir, enclos): object 'DoParallelStuff' not found>
+
+$slave6
+[1] "Error in eval(expr, envir, enclos) : object 'DoParallelStuff' not found\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in eval(expr, envir, enclos): object 'DoParallelStuff' not found>
+
+$slave7
+[1] "Error in eval(expr, envir, enclos) : object 'DoParallelStuff' not found\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in eval(expr, envir, enclos): object 'DoParallelStuff' not found>
+
+$slave8
+[1] "Error in eval(expr, envir, enclos) : object 'DoParallelStuff' not found\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in eval(expr, envir, enclos): object 'DoParallelStuff' not found>
+
+> 
+> # Tell all slaves to close down, and exit the program
+> 
+> mpi.close.Rslaves(dellog=FALSE)
+[1] 1
+> mpi.quit()

@@ -1,0 +1,12 @@
+#!/bin/csh
+#PBS -S /bin/sh
+#PBS -N Rhello
+#PBS -l nodes=2:ppn=8
+#PBS -l walltime=1:00:00
+#PBS -q staff
+#PBS -j oe
+
+cat `echo $PBS_NODEFILE`
+module load openmpi
+cd $PBS_O_WORKDIR
+mpirun -np 1 /usr/local/R-2.15.0/bin/R --no-save < hello_world.R

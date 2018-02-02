@@ -1,0 +1,1 @@
+quarter <- "Man on horse";

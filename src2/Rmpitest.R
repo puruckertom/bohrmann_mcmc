@@ -1,0 +1,5 @@
+library(Rmpi)
+mpi.spawn.Rslaves(nslaves=4,needlog=FALSE)
+mpi.remote.exec(paste("hello, world, from PE ", mpi.comm.rank(), " of ", mpi.comm.size() ) )
+mpi.close.Rslaves(dellog=FALSE)
+mpi.exit()
